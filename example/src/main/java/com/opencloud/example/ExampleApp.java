@@ -1,0 +1,25 @@
+package com.opencloud.example;
+
+import com.opencloud.sdk.OpenCloudClient;
+import com.opencloud.sdk.OpenCloudClientConfig;
+import com.opencloud.sdk.auth.BearerTokenAuthProvider;
+import com.opencloud.sdk.graph.model.CollectionResponse;
+import com.opencloud.sdk.graph.model.Drive;
+import com.opencloud.sdk.graph.model.User;
+
+public class ExampleApp {
+    public static void main(String[] args) throws Exception {
+        OpenCloudClient client = OpenCloudClient.create(
+            OpenCloudClientConfig.builder()
+                .baseUrl("https://cloud.example.com")
+                .authProvider(new BearerTokenAuthProvider("YOUR_TOKEN"))
+                .build()
+        );
+
+        User me = client.graph().me().getProfileModel().getBody();
+        CollectionResponse<Drive> drives = client.graph().drives().listModel().getBody();
+
+        System.out.println("Current user: " + me);
+        System.out.println("Drives returned: " + (drives != null && drives.getValue() != null ? drives.getValue().size() : 0));
+    }
+}

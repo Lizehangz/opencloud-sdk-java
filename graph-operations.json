@@ -1,0 +1,487 @@
+[
+    {
+        "operationId":  "UpdateOwnUser",
+        "method":  "PATCH",
+        "path":  "/v1.0/me"
+    },
+    {
+        "operationId":  "GetOwnUser",
+        "method":  "GET",
+        "path":  "/v1.0/me"
+    },
+    {
+        "operationId":  "ChangeOwnPassword",
+        "method":  "POST",
+        "path":  "/v1.0/me/changePassword"
+    },
+    {
+        "operationId":  "GetOwnUserPhoto",
+        "method":  "GET",
+        "path":  "/v1.0/me/photo/$value"
+    },
+    {
+        "operationId":  "UpdateOwnUserPhotoPut",
+        "method":  "PUT",
+        "path":  "/v1.0/me/photo/$value"
+    },
+    {
+        "operationId":  "UpdateOwnUserPhotoPatch",
+        "method":  "PATCH",
+        "path":  "/v1.0/me/photo/$value"
+    },
+    {
+        "operationId":  "DeleteOwnUserPhoto",
+        "method":  "DELETE",
+        "path":  "/v1.0/me/photo/$value"
+    },
+    {
+        "operationId":  "GetActivities",
+        "method":  "GET",
+        "path":  "/v1beta1/extensions/org.libregraph/activities"
+    },
+    {
+        "operationId":  "ListMyDrivesBeta",
+        "method":  "GET",
+        "path":  "/v1beta1/me/drives"
+    },
+    {
+        "operationId":  "ListMyDrives",
+        "method":  "GET",
+        "path":  "/v1.0/me/drives"
+    },
+    {
+        "operationId":  "ListAllDrivesBeta",
+        "method":  "GET",
+        "path":  "/v1beta1/drives"
+    },
+    {
+        "operationId":  "ListAllDrives",
+        "method":  "GET",
+        "path":  "/v1.0/drives"
+    },
+    {
+        "operationId":  "CreateDrive",
+        "method":  "POST",
+        "path":  "/v1.0/drives"
+    },
+    {
+        "operationId":  "GetDrive",
+        "method":  "GET",
+        "path":  "/v1.0/drives/{drive-id}"
+    },
+    {
+        "operationId":  "UpdateDrive",
+        "method":  "PATCH",
+        "path":  "/v1.0/drives/{drive-id}"
+    },
+    {
+        "operationId":  "DeleteDrive",
+        "method":  "DELETE",
+        "path":  "/v1.0/drives/{drive-id}"
+    },
+    {
+        "operationId":  "CreateDriveItem",
+        "method":  "POST",
+        "path":  "/v1beta1/drives/{drive-id}/root/children"
+    },
+    {
+        "operationId":  "CreateLinkSpaceRoot",
+        "method":  "POST",
+        "path":  "/v1beta1/drives/{drive-id}/root/createLink"
+    },
+    {
+        "operationId":  "InviteSpaceRoot",
+        "method":  "POST",
+        "path":  "/v1beta1/drives/{drive-id}/root/invite"
+    },
+    {
+        "operationId":  "ListPermissionsSpaceRoot",
+        "method":  "GET",
+        "path":  "/v1beta1/drives/{drive-id}/root/permissions"
+    },
+    {
+        "operationId":  "GetPermissionSpaceRoot",
+        "method":  "GET",
+        "path":  "/v1beta1/drives/{drive-id}/root/permissions/{perm-id}"
+    },
+    {
+        "operationId":  "UpdatePermissionSpaceRoot",
+        "method":  "PATCH",
+        "path":  "/v1beta1/drives/{drive-id}/root/permissions/{perm-id}"
+    },
+    {
+        "operationId":  "DeletePermissionSpaceRoot",
+        "method":  "DELETE",
+        "path":  "/v1beta1/drives/{drive-id}/root/permissions/{perm-id}"
+    },
+    {
+        "operationId":  "SetPermissionPasswordSpaceRoot",
+        "method":  "POST",
+        "path":  "/v1beta1/drives/{drive-id}/root/permissions/{perm-id}/setPassword"
+    },
+    {
+        "operationId":  "GetDriveItem",
+        "method":  "GET",
+        "path":  "/v1beta1/drives/{drive-id}/items/{item-id}"
+    },
+    {
+        "operationId":  "UpdateDriveItem",
+        "method":  "PATCH",
+        "path":  "/v1beta1/drives/{drive-id}/items/{item-id}"
+    },
+    {
+        "operationId":  "DeleteDriveItem",
+        "method":  "DELETE",
+        "path":  "/v1beta1/drives/{drive-id}/items/{item-id}"
+    },
+    {
+        "operationId":  "CreateLink",
+        "method":  "POST",
+        "path":  "/v1beta1/drives/{drive-id}/items/{item-id}/createLink"
+    },
+    {
+        "operationId":  "Invite",
+        "method":  "POST",
+        "path":  "/v1beta1/drives/{drive-id}/items/{item-id}/invite"
+    },
+    {
+        "operationId":  "ListPermissions",
+        "method":  "GET",
+        "path":  "/v1beta1/drives/{drive-id}/items/{item-id}/permissions"
+    },
+    {
+        "operationId":  "GetPermission",
+        "method":  "GET",
+        "path":  "/v1beta1/drives/{drive-id}/items/{item-id}/permissions/{perm-id}"
+    },
+    {
+        "operationId":  "UpdatePermission",
+        "method":  "PATCH",
+        "path":  "/v1beta1/drives/{drive-id}/items/{item-id}/permissions/{perm-id}"
+    },
+    {
+        "operationId":  "DeletePermission",
+        "method":  "DELETE",
+        "path":  "/v1beta1/drives/{drive-id}/items/{item-id}/permissions/{perm-id}"
+    },
+    {
+        "operationId":  "SetPermissionPassword",
+        "method":  "POST",
+        "path":  "/v1beta1/drives/{drive-id}/items/{item-id}/permissions/{perm-id}/setPassword"
+    },
+    {
+        "operationId":  "GetRoot",
+        "method":  "GET",
+        "path":  "/v1.0/drives/{drive-id}/root"
+    },
+    {
+        "operationId":  "ListGroups",
+        "method":  "GET",
+        "path":  "/v1.0/groups"
+    },
+    {
+        "operationId":  "CreateGroup",
+        "method":  "POST",
+        "path":  "/v1.0/groups"
+    },
+    {
+        "operationId":  "GetGroup",
+        "method":  "GET",
+        "path":  "/v1.0/groups/{group-id}"
+    },
+    {
+        "operationId":  "UpdateGroup",
+        "method":  "PATCH",
+        "path":  "/v1.0/groups/{group-id}"
+    },
+    {
+        "operationId":  "DeleteGroup",
+        "method":  "DELETE",
+        "path":  "/v1.0/groups/{group-id}"
+    },
+    {
+        "operationId":  "ListMembers",
+        "method":  "GET",
+        "path":  "/v1.0/groups/{group-id}/members"
+    },
+    {
+        "operationId":  "AddMember",
+        "method":  "POST",
+        "path":  "/v1.0/groups/{group-id}/members/$ref"
+    },
+    {
+        "operationId":  "DeleteMember",
+        "method":  "DELETE",
+        "path":  "/v1.0/groups/{group-id}/members/{directory-object-id}/$ref"
+    },
+    {
+        "operationId":  "GetHome",
+        "method":  "GET",
+        "path":  "/v1.0/me/drive"
+    },
+    {
+        "operationId":  "HomeGetRoot",
+        "method":  "GET",
+        "path":  "/v1.0/me/drive/root"
+    },
+    {
+        "operationId":  "HomeGetChildren",
+        "method":  "GET",
+        "path":  "/v1.0/me/drive/root/children"
+    },
+    {
+        "operationId":  "ListSharedByMe",
+        "method":  "GET",
+        "path":  "/v1beta1/me/drive/sharedByMe"
+    },
+    {
+        "operationId":  "FollowDriveItem",
+        "method":  "POST",
+        "path":  "/v1.0/me/drive/items/{item-id}/follow"
+    },
+    {
+        "operationId":  "UnfollowDriveItem",
+        "method":  "DELETE",
+        "path":  "/v1.0/me/drive/following/{item-id}"
+    },
+    {
+        "operationId":  "ListSharedWithMe",
+        "method":  "GET",
+        "path":  "/v1beta1/me/drive/sharedWithMe"
+    },
+    {
+        "operationId":  "CreateInvitation",
+        "method":  "POST",
+        "path":  "/v1.0/invitations"
+    },
+    {
+        "operationId":  "ListInvitations",
+        "method":  "GET",
+        "path":  "/v1.0/invitations"
+    },
+    {
+        "operationId":  "GetInvitation",
+        "method":  "GET",
+        "path":  "/v1.0/invitations/{invitation-id}"
+    },
+    {
+        "operationId":  "ListUsers",
+        "method":  "GET",
+        "path":  "/v1.0/users"
+    },
+    {
+        "operationId":  "CreateUser",
+        "method":  "POST",
+        "path":  "/v1.0/users"
+    },
+    {
+        "operationId":  "GetUser",
+        "method":  "GET",
+        "path":  "/v1.0/users/{user-id}"
+    },
+    {
+        "operationId":  "UpdateUser",
+        "method":  "PATCH",
+        "path":  "/v1.0/users/{user-id}"
+    },
+    {
+        "operationId":  "DeleteUser",
+        "method":  "DELETE",
+        "path":  "/v1.0/users/{user-id}"
+    },
+    {
+        "operationId":  "ExportPersonalData",
+        "method":  "POST",
+        "path":  "/v1.0/users/{user-id}/exportPersonalData"
+    },
+    {
+        "operationId":  "user.ListAppRoleAssignments",
+        "method":  "GET",
+        "path":  "/v1.0/users/{user-id}/appRoleAssignments"
+    },
+    {
+        "operationId":  "user.CreateAppRoleAssignments",
+        "method":  "POST",
+        "path":  "/v1.0/users/{user-id}/appRoleAssignments"
+    },
+    {
+        "operationId":  "user.DeleteAppRoleAssignments",
+        "method":  "DELETE",
+        "path":  "/v1.0/users/{user-id}/appRoleAssignments/{appRoleAssignment-id}"
+    },
+    {
+        "operationId":  "GetUserPhoto",
+        "method":  "GET",
+        "path":  "/v1.0/users/{user-id}/photo/$value"
+    },
+    {
+        "operationId":  "ListEducationUsers",
+        "method":  "GET",
+        "path":  "/v1.0/education/users"
+    },
+    {
+        "operationId":  "CreateEducationUser",
+        "method":  "POST",
+        "path":  "/v1.0/education/users"
+    },
+    {
+        "operationId":  "GetEducationUser",
+        "method":  "GET",
+        "path":  "/v1.0/education/users/{user-id}"
+    },
+    {
+        "operationId":  "UpdateEducationUser",
+        "method":  "PATCH",
+        "path":  "/v1.0/education/users/{user-id}"
+    },
+    {
+        "operationId":  "DeleteEducationUser",
+        "method":  "DELETE",
+        "path":  "/v1.0/education/users/{user-id}"
+    },
+    {
+        "operationId":  "ListSchools",
+        "method":  "GET",
+        "path":  "/v1.0/education/schools"
+    },
+    {
+        "operationId":  "CreateSchool",
+        "method":  "POST",
+        "path":  "/v1.0/education/schools"
+    },
+    {
+        "operationId":  "GetSchool",
+        "method":  "GET",
+        "path":  "/v1.0/education/schools/{school-id}"
+    },
+    {
+        "operationId":  "UpdateSchool",
+        "method":  "PATCH",
+        "path":  "/v1.0/education/schools/{school-id}"
+    },
+    {
+        "operationId":  "DeleteSchool",
+        "method":  "DELETE",
+        "path":  "/v1.0/education/schools/{school-id}"
+    },
+    {
+        "operationId":  "ListSchoolUsers",
+        "method":  "GET",
+        "path":  "/v1.0/education/schools/{school-id}/users"
+    },
+    {
+        "operationId":  "AddUserToSchool",
+        "method":  "POST",
+        "path":  "/v1.0/education/schools/{school-id}/users/$ref"
+    },
+    {
+        "operationId":  "DeleteUserFromSchool",
+        "method":  "DELETE",
+        "path":  "/v1.0/education/schools/{school-id}/users/{user-id}/$ref"
+    },
+    {
+        "operationId":  "ListSchoolClasses",
+        "method":  "GET",
+        "path":  "/v1.0/education/schools/{school-id}/classes"
+    },
+    {
+        "operationId":  "AddClassToSchool",
+        "method":  "POST",
+        "path":  "/v1.0/education/schools/{school-id}/classes/$ref"
+    },
+    {
+        "operationId":  "DeleteClassFromSchool",
+        "method":  "DELETE",
+        "path":  "/v1.0/education/schools/{school-id}/classes/{class-id}/$ref"
+    },
+    {
+        "operationId":  "ListClasses",
+        "method":  "GET",
+        "path":  "/v1.0/education/classes"
+    },
+    {
+        "operationId":  "CreateClass",
+        "method":  "POST",
+        "path":  "/v1.0/education/classes"
+    },
+    {
+        "operationId":  "GetClass",
+        "method":  "GET",
+        "path":  "/v1.0/education/classes/{class-id}"
+    },
+    {
+        "operationId":  "UpdateClass",
+        "method":  "PATCH",
+        "path":  "/v1.0/education/classes/{class-id}"
+    },
+    {
+        "operationId":  "DeleteClass",
+        "method":  "DELETE",
+        "path":  "/v1.0/education/classes/{class-id}"
+    },
+    {
+        "operationId":  "ListClassMembers",
+        "method":  "GET",
+        "path":  "/v1.0/education/classes/{class-id}/members"
+    },
+    {
+        "operationId":  "AddUserToClass",
+        "method":  "POST",
+        "path":  "/v1.0/education/classes/{class-id}/members/$ref"
+    },
+    {
+        "operationId":  "DeleteUserFromClass",
+        "method":  "DELETE",
+        "path":  "/v1.0/education/classes/{class-id}/members/{user-id}/$ref"
+    },
+    {
+        "operationId":  "GetTeachers",
+        "method":  "GET",
+        "path":  "/v1.0/education/classes/{class-id}/teachers"
+    },
+    {
+        "operationId":  "AddTeacherToClass",
+        "method":  "POST",
+        "path":  "/v1.0/education/classes/{class-id}/teachers/$ref"
+    },
+    {
+        "operationId":  "DeleteTeacherFromClass",
+        "method":  "DELETE",
+        "path":  "/v1.0/education/classes/{class-id}/teachers/{user-id}/$ref"
+    },
+    {
+        "operationId":  "GetTags",
+        "method":  "GET",
+        "path":  "/v1.0/extensions/org.libregraph/tags"
+    },
+    {
+        "operationId":  "AssignTags",
+        "method":  "PUT",
+        "path":  "/v1.0/extensions/org.libregraph/tags"
+    },
+    {
+        "operationId":  "UnassignTags",
+        "method":  "DELETE",
+        "path":  "/v1.0/extensions/org.libregraph/tags"
+    },
+    {
+        "operationId":  "ListApplications",
+        "method":  "GET",
+        "path":  "/v1.0/applications"
+    },
+    {
+        "operationId":  "GetApplication",
+        "method":  "GET",
+        "path":  "/v1.0/applications/{application-id}"
+    },
+    {
+        "operationId":  "ListPermissionRoleDefinitions",
+        "method":  "GET",
+        "path":  "/v1beta1/roleManagement/permissions/roleDefinitions"
+    },
+    {
+        "operationId":  "GetPermissionRoleDefinition",
+        "method":  "GET",
+        "path":  "/v1beta1/roleManagement/permissions/roleDefinitions/{role-id}"
+    }
+]
