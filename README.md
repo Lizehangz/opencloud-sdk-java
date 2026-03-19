@@ -1,4 +1,4 @@
-# OpenCloud OkHttp SDK
+# OpenCloud Sdk Java
 
 This project is a Java SDK scaffold for OpenCloud built on top of `OkHttp`.
 
