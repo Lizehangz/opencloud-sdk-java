@@ -553,6 +553,18 @@ client.webDav().delete("/files/demo/archive/readme.txt");
 - `LICENSE` contains the Apache 2.0 license text.
 - `CHANGELOG.md` tracks notable SDK changes.
 - `example/` contains a minimal consumer project that shows how to use the SDK as a dependency.
+- `.github/workflows/ci.yml` runs Maven tests and package builds on GitHub Actions.
+- `.github/workflows/publish.yml` publishes the package to GitHub Packages on tag push or manual trigger.
+
+## GitHub Packages
+
+The Maven package repository is configured as:
+
+```text
+https://maven.pkg.github.com/Lizehangz/opencloud-sdk-java
+```
+
+The included publish workflow uses `GITHUB_TOKEN` and the `github` server id from `pom.xml`.
 
 ## Notes
 
