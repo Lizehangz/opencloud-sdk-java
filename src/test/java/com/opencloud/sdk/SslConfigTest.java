@@ -64,6 +64,7 @@ public class SslConfigTest {
             OpenCloudClientConfig.builder()
                 .baseUrl(server.url("/").toString())
                 .sslSocketFactory(clientCertificates.sslSocketFactory(), clientCertificates.trustManager())
+                .hostnameVerifier((hostname, session) -> hostname.contains("127.0.0.1") || "localhost".equals(hostname))
                 .build()
         );
 
