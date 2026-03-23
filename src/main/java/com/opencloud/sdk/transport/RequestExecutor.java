@@ -93,8 +93,12 @@ public final class RequestExecutor {
                 throw buildException(response.code(), response.message(), bytes);
             }
 
-            T body = deserialize(bytes, responseType);
-            return new ApiResponse<T>(response.code(), response.headers(), body);
+            try {
+                T body = deserialize(bytes, responseType);
+                return new ApiResponse<T>(response.code(), response.headers(), body);
+            } catch (IOException e) {
+                throw buildSuccessParseException(response.code(), response.message(), bytes, e);
+            }
         } finally {
             response.close();
         }
@@ -130,8 +134,12 @@ public final class RequestExecutor {
                 throw buildException(response.code(), response.message(), bytes);
             }
 
-            T body = deserialize(bytes, responseType);
-            return new ApiResponse<T>(response.code(), response.headers(), body);
+            try {
+                T body = deserialize(bytes, responseType);
+                return new ApiResponse<T>(response.code(), response.headers(), body);
+            } catch (IOException e) {
+                throw buildSuccessParseException(response.code(), response.message(), bytes, e);
+            }
         } finally {
             response.close();
         }
@@ -230,6 +238,22 @@ public final class RequestExecutor {
         return objectMapper.readValue(body, responseType);
     }
 
+    private OpenCloudException buildSuccessParseException(int statusCode, String statusMessage, byte[] bytes, IOException cause) throws IOException {
+        String responseBody = new String(bytes, "UTF-8");
+        String preview = responseBody;
+        if (preview.length() > 200) {
+            preview = preview.substring(0, 200) + "...";
+        }
+
+        String message = "OpenCloud request returned " + statusCode + " " + statusMessage + " but the body could not be parsed";
+        if (preview != null && !preview.trim().isEmpty()) {
+            message = message + ": " + preview;
+        }
+
+        OpenCloudException exception = new OpenCloudException(message, statusCode, responseBody, null);
+        exception.initCause(cause);
+        return exception;
+    }
     private OpenCloudException buildException(int statusCode, String statusMessage, byte[] bytes) throws IOException {
         String responseBody = new String(bytes, "UTF-8");
         OpenCloudApiError apiError = parseApiError(bytes);
@@ -311,3 +335,5 @@ public final class RequestExecutor {
         return value.asText();
     }
 }
+
+

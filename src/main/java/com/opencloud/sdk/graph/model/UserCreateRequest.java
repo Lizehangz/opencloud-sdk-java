@@ -1,31 +1,28 @@
 package com.opencloud.sdk.graph.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.List;
 
 public class UserCreateRequest {
-    @JsonProperty("onPremisesSAMAccountName")
-    private String onPremisesSamAccountName;
+    private Boolean accountEnabled;
     private String displayName;
-    private String givenName;
-    private String surname;
-    private String mail;
-    private String preferredLanguage;
-    private String externalId;
-    private String primaryRole;
     private List<ObjectIdentity> identities;
+    private String mail;
+    private String onPremisesSamAccountName;
+    private PasswordProfile passwordProfile;
+    private String surname;
+    private String givenName;
+    private String preferredLanguage;
 
     public static Builder builder() {
         return new Builder();
     }
 
-    public String getOnPremisesSamAccountName() {
-        return onPremisesSamAccountName;
+    public Boolean getAccountEnabled() {
+        return accountEnabled;
     }
 
-    public void setOnPremisesSamAccountName(String onPremisesSamAccountName) {
-        this.onPremisesSamAccountName = onPremisesSamAccountName;
+    public void setAccountEnabled(Boolean accountEnabled) {
+        this.accountEnabled = accountEnabled;
     }
 
     public String getDisplayName() {
@@ -36,20 +33,12 @@ public class UserCreateRequest {
         this.displayName = displayName;
     }
 
-    public String getGivenName() {
-        return givenName;
+    public List<ObjectIdentity> getIdentities() {
+        return identities;
     }
 
-    public void setGivenName(String givenName) {
-        this.givenName = givenName;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setIdentities(List<ObjectIdentity> identities) {
+        this.identities = identities;
     }
 
     public String getMail() {
@@ -60,6 +49,38 @@ public class UserCreateRequest {
         this.mail = mail;
     }
 
+    public String getOnPremisesSamAccountName() {
+        return onPremisesSamAccountName;
+    }
+
+    public void setOnPremisesSamAccountName(String onPremisesSamAccountName) {
+        this.onPremisesSamAccountName = onPremisesSamAccountName;
+    }
+
+    public PasswordProfile getPasswordProfile() {
+        return passwordProfile;
+    }
+
+    public void setPasswordProfile(PasswordProfile passwordProfile) {
+        this.passwordProfile = passwordProfile;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getGivenName() {
+        return givenName;
+    }
+
+    public void setGivenName(String givenName) {
+        this.givenName = givenName;
+    }
+
     public String getPreferredLanguage() {
         return preferredLanguage;
     }
@@ -68,35 +89,11 @@ public class UserCreateRequest {
         this.preferredLanguage = preferredLanguage;
     }
 
-    public String getExternalId() {
-        return externalId;
-    }
-
-    public void setExternalId(String externalId) {
-        this.externalId = externalId;
-    }
-
-    public String getPrimaryRole() {
-        return primaryRole;
-    }
-
-    public void setPrimaryRole(String primaryRole) {
-        this.primaryRole = primaryRole;
-    }
-
-    public List<ObjectIdentity> getIdentities() {
-        return identities;
-    }
-
-    public void setIdentities(List<ObjectIdentity> identities) {
-        this.identities = identities;
-    }
-
     public static final class Builder {
         private final UserCreateRequest request = new UserCreateRequest();
 
-        public Builder onPremisesSamAccountName(String value) {
-            request.setOnPremisesSamAccountName(value);
+        public Builder accountEnabled(boolean value) {
+            request.setAccountEnabled(value);
             return this;
         }
 
@@ -105,13 +102,8 @@ public class UserCreateRequest {
             return this;
         }
 
-        public Builder givenName(String value) {
-            request.setGivenName(value);
-            return this;
-        }
-
-        public Builder surname(String value) {
-            request.setSurname(value);
+        public Builder identities(List<ObjectIdentity> value) {
+            request.setIdentities(value);
             return this;
         }
 
@@ -120,23 +112,28 @@ public class UserCreateRequest {
             return this;
         }
 
+        public Builder onPremisesSamAccountName(String value) {
+            request.setOnPremisesSamAccountName(value);
+            return this;
+        }
+
+        public Builder passwordProfile(PasswordProfile value) {
+            request.setPasswordProfile(value);
+            return this;
+        }
+
+        public Builder surname(String value) {
+            request.setSurname(value);
+            return this;
+        }
+
+        public Builder givenName(String value) {
+            request.setGivenName(value);
+            return this;
+        }
+
         public Builder preferredLanguage(String value) {
             request.setPreferredLanguage(value);
-            return this;
-        }
-
-        public Builder externalId(String value) {
-            request.setExternalId(value);
-            return this;
-        }
-
-        public Builder primaryRole(String value) {
-            request.setPrimaryRole(value);
-            return this;
-        }
-
-        public Builder identities(List<ObjectIdentity> value) {
-            request.setIdentities(value);
             return this;
         }
 

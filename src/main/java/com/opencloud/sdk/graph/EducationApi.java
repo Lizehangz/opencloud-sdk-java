@@ -1,16 +1,15 @@
 package com.opencloud.sdk.graph;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.opencloud.sdk.ApiRequest;
 import com.opencloud.sdk.ApiResponse;
 import com.opencloud.sdk.graph.model.CollectionResponse;
 import com.opencloud.sdk.graph.model.EducationClass;
 import com.opencloud.sdk.graph.model.EducationSchool;
+import com.opencloud.sdk.graph.model.EducationUser;
+import com.opencloud.sdk.graph.model.EducationUserCreateRequest;
+import com.opencloud.sdk.graph.model.EducationUserUpdateRequest;
 import com.opencloud.sdk.graph.model.ReferenceRequest;
-import com.opencloud.sdk.graph.model.User;
-import com.opencloud.sdk.graph.model.UserCreateRequest;
-import com.opencloud.sdk.graph.model.UserUpdateRequest;
 
 import java.io.IOException;
 
@@ -19,35 +18,35 @@ public final class EducationApi extends GraphResourceApi {
         super(graphApi);
     }
 
-    public ApiResponse<CollectionResponse<User>> listUsersModel() throws IOException {
+    public ApiResponse<CollectionResponse<EducationUser>> listUsersModel() throws IOException {
         return model(
             GraphOperation.LISTEDUCATIONUSERS,
             ApiRequest.builder().build(),
-            new TypeReference<CollectionResponse<User>>() { }
+            new TypeReference<CollectionResponse<EducationUser>>() { }
         );
     }
 
-    public ApiResponse<User> getUserModel(String userId) throws IOException {
+    public ApiResponse<EducationUser> getUserModel(String userId) throws IOException {
         return model(
             GraphOperation.GETEDUCATIONUSER,
             ApiRequest.builder().pathParam("user-id", userId).build(),
-            User.class
+            EducationUser.class
         );
     }
 
-    public ApiResponse<User> createUser(UserCreateRequest payload) throws IOException {
+    public ApiResponse<EducationUser> createUser(EducationUserCreateRequest payload) throws IOException {
         return model(
             GraphOperation.CREATEEDUCATIONUSER,
             ApiRequest.builder().body(payload).build(),
-            User.class
+            EducationUser.class
         );
     }
 
-    public ApiResponse<User> updateUser(String userId, UserUpdateRequest payload) throws IOException {
+    public ApiResponse<EducationUser> updateUser(String userId, EducationUserUpdateRequest payload) throws IOException {
         return model(
             GraphOperation.UPDATEEDUCATIONUSER,
             ApiRequest.builder().pathParam("user-id", userId).body(payload).build(),
-            User.class
+            EducationUser.class
         );
     }
 
@@ -136,27 +135,27 @@ public final class EducationApi extends GraphResourceApi {
         );
     }
 
-    public ApiResponse<CollectionResponse<User>> listClassMembersModel(String classId) throws IOException {
+    public ApiResponse<CollectionResponse<EducationUser>> listClassMembersModel(String classId) throws IOException {
         return model(
             GraphOperation.LISTCLASSMEMBERS,
             ApiRequest.builder().pathParam("class-id", classId).build(),
-            new TypeReference<CollectionResponse<User>>() { }
+            new TypeReference<CollectionResponse<EducationUser>>() { }
         );
     }
 
-    public ApiResponse<CollectionResponse<User>> listTeachersModel(String classId) throws IOException {
+    public ApiResponse<CollectionResponse<EducationUser>> listTeachersModel(String classId) throws IOException {
         return model(
             GraphOperation.GETTEACHERS,
             ApiRequest.builder().pathParam("class-id", classId).build(),
-            new TypeReference<CollectionResponse<User>>() { }
+            new TypeReference<CollectionResponse<EducationUser>>() { }
         );
     }
 
-    public ApiResponse<CollectionResponse<User>> listSchoolUsersModel(String schoolId) throws IOException {
+    public ApiResponse<CollectionResponse<EducationUser>> listSchoolUsersModel(String schoolId) throws IOException {
         return model(
             GraphOperation.LISTSCHOOLUSERS,
             ApiRequest.builder().pathParam("school-id", schoolId).build(),
-            new TypeReference<CollectionResponse<User>>() { }
+            new TypeReference<CollectionResponse<EducationUser>>() { }
         );
     }
 

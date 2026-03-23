@@ -9,6 +9,7 @@ import com.opencloud.sdk.graph.model.CollectionResponse;
 import com.opencloud.sdk.graph.model.RoleDefinition;
 
 import java.io.IOException;
+import java.util.List;
 
 public final class ApplicationsApi extends GraphResourceApi {
     ApplicationsApi(GraphApi graphApi) {
@@ -46,11 +47,11 @@ public final class ApplicationsApi extends GraphResourceApi {
         return json(GraphOperation.LISTPERMISSIONROLEDEFINITIONS, ApiRequest.builder().build());
     }
 
-    public ApiResponse<CollectionResponse<RoleDefinition>> listRoleDefinitionsModel() throws IOException {
+    public ApiResponse<List<RoleDefinition>> listRoleDefinitionsModel() throws IOException {
         return model(
             GraphOperation.LISTPERMISSIONROLEDEFINITIONS,
             ApiRequest.builder().build(),
-            new TypeReference<CollectionResponse<RoleDefinition>>() { }
+            new TypeReference<List<RoleDefinition>>() { }
         );
     }
 

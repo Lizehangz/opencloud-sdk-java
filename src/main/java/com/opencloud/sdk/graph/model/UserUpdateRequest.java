@@ -1,14 +1,28 @@
 package com.opencloud.sdk.graph.model;
 
+import java.util.List;
+
 public class UserUpdateRequest {
+    private Boolean accountEnabled;
     private String displayName;
+    private List<ObjectIdentity> identities;
     private String mail;
-    private String preferredLanguage;
-    private String givenName;
+    private String onPremisesSamAccountName;
+    private PasswordProfile passwordProfile;
     private String surname;
+    private String givenName;
+    private String preferredLanguage;
 
     public static Builder builder() {
         return new Builder();
+    }
+
+    public Boolean getAccountEnabled() {
+        return accountEnabled;
+    }
+
+    public void setAccountEnabled(Boolean accountEnabled) {
+        this.accountEnabled = accountEnabled;
     }
 
     public String getDisplayName() {
@@ -19,6 +33,14 @@ public class UserUpdateRequest {
         this.displayName = displayName;
     }
 
+    public List<ObjectIdentity> getIdentities() {
+        return identities;
+    }
+
+    public void setIdentities(List<ObjectIdentity> identities) {
+        this.identities = identities;
+    }
+
     public String getMail() {
         return mail;
     }
@@ -27,20 +49,20 @@ public class UserUpdateRequest {
         this.mail = mail;
     }
 
-    public String getPreferredLanguage() {
-        return preferredLanguage;
+    public String getOnPremisesSamAccountName() {
+        return onPremisesSamAccountName;
     }
 
-    public void setPreferredLanguage(String preferredLanguage) {
-        this.preferredLanguage = preferredLanguage;
+    public void setOnPremisesSamAccountName(String onPremisesSamAccountName) {
+        this.onPremisesSamAccountName = onPremisesSamAccountName;
     }
 
-    public String getGivenName() {
-        return givenName;
+    public PasswordProfile getPasswordProfile() {
+        return passwordProfile;
     }
 
-    public void setGivenName(String givenName) {
-        this.givenName = givenName;
+    public void setPasswordProfile(PasswordProfile passwordProfile) {
+        this.passwordProfile = passwordProfile;
     }
 
     public String getSurname() {
@@ -51,11 +73,37 @@ public class UserUpdateRequest {
         this.surname = surname;
     }
 
+    public String getGivenName() {
+        return givenName;
+    }
+
+    public void setGivenName(String givenName) {
+        this.givenName = givenName;
+    }
+
+    public String getPreferredLanguage() {
+        return preferredLanguage;
+    }
+
+    public void setPreferredLanguage(String preferredLanguage) {
+        this.preferredLanguage = preferredLanguage;
+    }
+
     public static final class Builder {
         private final UserUpdateRequest request = new UserUpdateRequest();
 
+        public Builder accountEnabled(boolean value) {
+            request.setAccountEnabled(value);
+            return this;
+        }
+
         public Builder displayName(String value) {
             request.setDisplayName(value);
+            return this;
+        }
+
+        public Builder identities(List<ObjectIdentity> value) {
+            request.setIdentities(value);
             return this;
         }
 
@@ -64,8 +112,18 @@ public class UserUpdateRequest {
             return this;
         }
 
-        public Builder preferredLanguage(String value) {
-            request.setPreferredLanguage(value);
+        public Builder onPremisesSamAccountName(String value) {
+            request.setOnPremisesSamAccountName(value);
+            return this;
+        }
+
+        public Builder passwordProfile(PasswordProfile value) {
+            request.setPasswordProfile(value);
+            return this;
+        }
+
+        public Builder surname(String value) {
+            request.setSurname(value);
             return this;
         }
 
@@ -74,8 +132,8 @@ public class UserUpdateRequest {
             return this;
         }
 
-        public Builder surname(String value) {
-            request.setSurname(value);
+        public Builder preferredLanguage(String value) {
+            request.setPreferredLanguage(value);
             return this;
         }
 

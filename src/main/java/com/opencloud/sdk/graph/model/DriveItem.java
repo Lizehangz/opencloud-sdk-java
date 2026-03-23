@@ -1,15 +1,25 @@
 package com.opencloud.sdk.graph.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.List;
 import java.util.Objects;
 
 public class DriveItem {
     private String id;
     private String name;
+    private String createdDateTime;
+    private String lastModifiedDateTime;
+    private String description;
+    private String eTag;
+    private Long size;
+    private String webDavUrl;
     private ParentReference parentReference;
     private FolderFacet folder;
     private FileFacet file;
     private RemoteItem remoteItem;
     private SpecialFolder specialFolder;
+    private List<Permission> permissions;
 
     public String getId() {
         return id;
@@ -25,6 +35,56 @@ public class DriveItem {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCreatedDateTime() {
+        return createdDateTime;
+    }
+
+    public void setCreatedDateTime(String createdDateTime) {
+        this.createdDateTime = createdDateTime;
+    }
+
+    public String getLastModifiedDateTime() {
+        return lastModifiedDateTime;
+    }
+
+    public void setLastModifiedDateTime(String lastModifiedDateTime) {
+        this.lastModifiedDateTime = lastModifiedDateTime;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @JsonProperty("eTag")
+    public String getETag() {
+        return eTag;
+    }
+
+    @JsonProperty("eTag")
+    public void setETag(String eTag) {
+        this.eTag = eTag;
+    }
+
+    public Long getSize() {
+        return size;
+    }
+
+    public void setSize(Long size) {
+        this.size = size;
+    }
+
+    public String getWebDavUrl() {
+        return webDavUrl;
+    }
+
+    public void setWebDavUrl(String webDavUrl) {
+        this.webDavUrl = webDavUrl;
     }
 
     public ParentReference getParentReference() {
@@ -65,6 +125,14 @@ public class DriveItem {
 
     public void setSpecialFolder(SpecialFolder specialFolder) {
         this.specialFolder = specialFolder;
+    }
+
+    public List<Permission> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<Permission> permissions) {
+        this.permissions = permissions;
     }
 
     @Override

@@ -24,6 +24,7 @@ public class OpenCloudExceptionTest {
 
     @After
     public void tearDown() throws Exception {
+        client.close();
         server.shutdown();
     }
 
@@ -62,6 +63,25 @@ public class OpenCloudExceptionTest {
             Assert.assertEquals("500", ex.getErrorCode());
             Assert.assertEquals("Server exploded", ex.getErrorMessage());
             Assert.assertEquals("failure", ex.getTarget());
+        }
+    }
+
+    @Test
+    public void shouldExposeBodyWhenSuccessfulResponseCannotBeParsed() throws Exception {
+        server.enqueue(new MockResponse()
+            .setResponseCode(200)
+            .setHeader("Content-Type", "text/plain")
+            .setBody("can't split empty storage space ID: invalid storage space id"));
+
+        try {
+            client.graph().activities().listModel("resourceid:demo depth:2");
+            Assert.fail("Expected OpenCloudException");
+        } catch (OpenCloudException ex) {
+            Assert.assertEquals(200, ex.getStatusCode());
+            Assert.assertNull(ex.getApiError());
+            Assert.assertTrue(ex.getMessage().contains("could not be parsed"));
+            Assert.assertTrue(ex.getResponseBody().contains("invalid storage space id"));
+            Assert.assertNotNull(ex.getCause());
         }
     }
 }

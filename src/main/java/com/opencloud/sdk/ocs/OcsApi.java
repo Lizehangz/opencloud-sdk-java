@@ -33,7 +33,7 @@ public final class OcsApi {
 
     private ApiRequest withOcsHeaders(ApiRequest request) {
         ApiRequest.Builder builder = ApiRequest.builder()
-            .accept(request.getAccept())
+            .accept(request.getAccept() != null && !request.getAccept().trim().isEmpty() ? request.getAccept() : "application/json")
             .contentType(request.getContentType());
 
         if (request.getBinaryBody() != null) {
@@ -47,6 +47,9 @@ public final class OcsApi {
         }
         for (Map.Entry<String, String> entry : request.getQueryParams().entrySet()) {
             builder.queryParam(entry.getKey(), entry.getValue());
+        }
+        if (!request.getQueryParams().containsKey("format")) {
+            builder.queryParam("format", "json");
         }
         for (Map.Entry<String, String> entry : request.getHeaders().entrySet()) {
             builder.header(entry.getKey(), entry.getValue());

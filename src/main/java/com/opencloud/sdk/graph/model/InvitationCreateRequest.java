@@ -1,7 +1,7 @@
 package com.opencloud.sdk.graph.model;
 
 public class InvitationCreateRequest {
-    private InviteRecipient invitedUserEmailAddress;
+    private String invitedUserEmailAddress;
     private String invitedUserDisplayName;
     private Boolean sendInvitationMessage;
     private String inviteRedirectUrl;
@@ -10,11 +10,11 @@ public class InvitationCreateRequest {
         return new Builder();
     }
 
-    public InviteRecipient getInvitedUserEmailAddress() {
+    public String getInvitedUserEmailAddress() {
         return invitedUserEmailAddress;
     }
 
-    public void setInvitedUserEmailAddress(InviteRecipient invitedUserEmailAddress) {
+    public void setInvitedUserEmailAddress(String invitedUserEmailAddress) {
         this.invitedUserEmailAddress = invitedUserEmailAddress;
     }
 
@@ -46,7 +46,7 @@ public class InvitationCreateRequest {
         private final InvitationCreateRequest request = new InvitationCreateRequest();
 
         public Builder invitedUserEmail(String email) {
-            request.setInvitedUserEmailAddress(InviteRecipient.of(email));
+            request.setInvitedUserEmailAddress(email);
             return this;
         }
 

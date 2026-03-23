@@ -1,22 +1,22 @@
 package com.opencloud.sdk.graph.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.Objects;
 import java.util.List;
+import java.util.Objects;
 
 public class User {
     private String id;
+    private Boolean accountEnabled;
     private String displayName;
-    private String mail;
-    private String preferredLanguage;
-    private String givenName;
-    private String surname;
-    @JsonProperty("onPremisesSAMAccountName")
-    private String onPremisesSamAccountName;
-    private String externalId;
-    private String primaryRole;
+    private Drive drive;
     private List<ObjectIdentity> identities;
+    private String mail;
+    private String onPremisesSamAccountName;
+    private PasswordProfile passwordProfile;
+    private String surname;
+    private String givenName;
+    private String preferredLanguage;
+    private SignInActivity signInActivity;
+    private String userType;
 
     public String getId() {
         return id;
@@ -24,6 +24,14 @@ public class User {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Boolean getAccountEnabled() {
+        return accountEnabled;
+    }
+
+    public void setAccountEnabled(Boolean accountEnabled) {
+        this.accountEnabled = accountEnabled;
     }
 
     public String getDisplayName() {
@@ -34,36 +42,28 @@ public class User {
         this.displayName = displayName;
     }
 
+    public Drive getDrive() {
+        return drive;
+    }
+
+    public void setDrive(Drive drive) {
+        this.drive = drive;
+    }
+
+    public List<ObjectIdentity> getIdentities() {
+        return identities;
+    }
+
+    public void setIdentities(List<ObjectIdentity> identities) {
+        this.identities = identities;
+    }
+
     public String getMail() {
         return mail;
     }
 
     public void setMail(String mail) {
         this.mail = mail;
-    }
-
-    public String getPreferredLanguage() {
-        return preferredLanguage;
-    }
-
-    public void setPreferredLanguage(String preferredLanguage) {
-        this.preferredLanguage = preferredLanguage;
-    }
-
-    public String getGivenName() {
-        return givenName;
-    }
-
-    public void setGivenName(String givenName) {
-        this.givenName = givenName;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
     }
 
     public String getOnPremisesSamAccountName() {
@@ -74,28 +74,52 @@ public class User {
         this.onPremisesSamAccountName = onPremisesSamAccountName;
     }
 
-    public String getExternalId() {
-        return externalId;
+    public PasswordProfile getPasswordProfile() {
+        return passwordProfile;
     }
 
-    public void setExternalId(String externalId) {
-        this.externalId = externalId;
+    public void setPasswordProfile(PasswordProfile passwordProfile) {
+        this.passwordProfile = passwordProfile;
     }
 
-    public String getPrimaryRole() {
-        return primaryRole;
+    public String getSurname() {
+        return surname;
     }
 
-    public void setPrimaryRole(String primaryRole) {
-        this.primaryRole = primaryRole;
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
-    public List<ObjectIdentity> getIdentities() {
-        return identities;
+    public String getGivenName() {
+        return givenName;
     }
 
-    public void setIdentities(List<ObjectIdentity> identities) {
-        this.identities = identities;
+    public void setGivenName(String givenName) {
+        this.givenName = givenName;
+    }
+
+    public String getPreferredLanguage() {
+        return preferredLanguage;
+    }
+
+    public void setPreferredLanguage(String preferredLanguage) {
+        this.preferredLanguage = preferredLanguage;
+    }
+
+    public SignInActivity getSignInActivity() {
+        return signInActivity;
+    }
+
+    public void setSignInActivity(SignInActivity signInActivity) {
+        this.signInActivity = signInActivity;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 
     @Override

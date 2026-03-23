@@ -8,9 +8,10 @@ import com.opencloud.sdk.graph.model.CollectionResponse;
 import com.opencloud.sdk.graph.model.Group;
 import com.opencloud.sdk.graph.model.GroupCreateRequest;
 import com.opencloud.sdk.graph.model.GroupUpdateRequest;
-import com.opencloud.sdk.graph.model.Identity;
+import com.opencloud.sdk.graph.model.User;
 
 import java.io.IOException;
+import java.util.List;
 
 public final class GroupsApi extends GraphResourceApi {
     GroupsApi(GraphApi graphApi) {
@@ -52,8 +53,8 @@ public final class GroupsApi extends GraphResourceApi {
         return model(GraphOperation.CREATEGROUP, ApiRequest.builder().body(payload).build(), Group.class);
     }
 
-    public ApiResponse<JsonNode> update(String groupId, Object payload) throws IOException {
-        return json(
+    public ApiResponse<Void> update(String groupId, Object payload) throws IOException {
+        return empty(
             GraphOperation.UPDATEGROUP,
             ApiRequest.builder()
                 .pathParam("group-id", groupId)
@@ -62,14 +63,13 @@ public final class GroupsApi extends GraphResourceApi {
         );
     }
 
-    public ApiResponse<Group> update(String groupId, GroupUpdateRequest payload) throws IOException {
-        return model(
+    public ApiResponse<Void> update(String groupId, GroupUpdateRequest payload) throws IOException {
+        return empty(
             GraphOperation.UPDATEGROUP,
             ApiRequest.builder()
                 .pathParam("group-id", groupId)
                 .body(payload)
-                .build(),
-            Group.class
+                .build()
         );
     }
 
@@ -87,21 +87,21 @@ public final class GroupsApi extends GraphResourceApi {
         );
     }
 
-    public ApiResponse<CollectionResponse<Identity>> listMembersModel(String groupId) throws IOException {
+    public ApiResponse<List<User>> listMembersModel(String groupId) throws IOException {
         return model(
             GraphOperation.LISTMEMBERS,
             ApiRequest.builder().pathParam("group-id", groupId).build(),
-            new TypeReference<CollectionResponse<Identity>>() { }
+            new TypeReference<List<User>>() { }
         );
     }
 
-    public ApiResponse<Void> addMember(String groupId, String directoryObjectId) throws IOException {
+    public ApiResponse<Void> addMember(String groupId, String userId) throws IOException {
         return empty(
             GraphOperation.ADDMEMBER,
             ApiRequest.builder()
                 .pathParam("group-id", groupId)
                 .body(GraphPayload.object()
-                    .put("@odata.id", directoryObjectReference(directoryObjectId))
+                    .put("@odata.id", userReference(userId))
                     .build())
                 .build()
         );
@@ -117,7 +117,7 @@ public final class GroupsApi extends GraphResourceApi {
         );
     }
 
-    private String directoryObjectReference(String directoryObjectId) {
-        return graphApi.getBaseGraphUrl() + "/v1.0/directoryObjects/" + directoryObjectId;
+    private String userReference(String userId) {
+        return graphApi.getBaseGraphUrl() + "/v1.0/users/" + userId;
     }
 }

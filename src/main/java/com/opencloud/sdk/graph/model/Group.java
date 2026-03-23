@@ -1,11 +1,13 @@
 package com.opencloud.sdk.graph.model;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Group {
     private String id;
     private String displayName;
     private String description;
+    private List<String> groupTypes;
 
     public String getId() {
         return id;
@@ -29,6 +31,14 @@ public class Group {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<String> getGroupTypes() {
+        return groupTypes;
+    }
+
+    public void setGroupTypes(List<String> groupTypes) {
+        this.groupTypes = groupTypes;
     }
 
     @Override

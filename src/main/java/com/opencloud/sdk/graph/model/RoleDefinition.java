@@ -1,5 +1,7 @@
 package com.opencloud.sdk.graph.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 public class RoleDefinition {
@@ -7,6 +9,7 @@ public class RoleDefinition {
     private String displayName;
     private String description;
     private List<RolePermission> rolePermissions;
+    private Integer weight;
 
     public String getId() {
         return id;
@@ -38,5 +41,15 @@ public class RoleDefinition {
 
     public void setRolePermissions(List<RolePermission> rolePermissions) {
         this.rolePermissions = rolePermissions;
+    }
+
+    @JsonProperty("@libre.graph.weight")
+    public Integer getWeight() {
+        return weight;
+    }
+
+    @JsonProperty("@libre.graph.weight")
+    public void setWeight(Integer weight) {
+        this.weight = weight;
     }
 }

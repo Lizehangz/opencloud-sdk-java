@@ -7,15 +7,16 @@ import com.opencloud.sdk.transport.RequestExecutor;
 import com.opencloud.sdk.webdav.WebDavApi;
 import okhttp3.OkHttpClient;
 
-public final class OpenCloudClient {
+public final class OpenCloudClient implements AutoCloseable {
     private final OpenCloudClientConfig config;
+    private final OkHttpClient okHttpClient;
     private final GraphApi graphApi;
     private final OcsApi ocsApi;
     private final WebDavApi webDavApi;
 
     private OpenCloudClient(OpenCloudClientConfig config) {
         this.config = config;
-        OkHttpClient okHttpClient = config.createHttpClient();
+        this.okHttpClient = config.createHttpClient();
         ObjectMapper objectMapper = config.getObjectMapper();
         RequestExecutor requestExecutor = new RequestExecutor(config, okHttpClient, objectMapper);
         this.graphApi = new GraphApi(requestExecutor);
@@ -41,5 +42,17 @@ public final class OpenCloudClient {
 
     public WebDavApi webDav() {
         return webDavApi;
+    }
+
+    @Override
+    public void close() {
+        okHttpClient.dispatcher().executorService().shutdown();
+        okHttpClient.connectionPool().evictAll();
+        if (okHttpClient.cache() != null) {
+            try {
+                okHttpClient.cache().close();
+            } catch (Exception ignored) {
+            }
+        }
     }
 }

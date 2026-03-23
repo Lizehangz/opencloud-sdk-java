@@ -7,6 +7,10 @@ public class Drive {
     private String name;
     private String description;
     private String driveType;
+    private String driveAlias;
+    private String webUrl;
+    private String lastModifiedDateTime;
+    private IdentitySet owner;
     private Quota quota;
     private DriveItem root;
 
@@ -40,6 +44,38 @@ public class Drive {
 
     public void setDriveType(String driveType) {
         this.driveType = driveType;
+    }
+
+    public String getDriveAlias() {
+        return driveAlias;
+    }
+
+    public void setDriveAlias(String driveAlias) {
+        this.driveAlias = driveAlias;
+    }
+
+    public String getWebUrl() {
+        return webUrl;
+    }
+
+    public void setWebUrl(String webUrl) {
+        this.webUrl = webUrl;
+    }
+
+    public String getLastModifiedDateTime() {
+        return lastModifiedDateTime;
+    }
+
+    public void setLastModifiedDateTime(String lastModifiedDateTime) {
+        this.lastModifiedDateTime = lastModifiedDateTime;
+    }
+
+    public IdentitySet getOwner() {
+        return owner;
+    }
+
+    public void setOwner(IdentitySet owner) {
+        this.owner = owner;
     }
 
     public Quota getQuota() {
