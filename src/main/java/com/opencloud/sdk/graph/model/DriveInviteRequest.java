@@ -1,7 +1,10 @@
 package com.opencloud.sdk.graph.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.List;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class DriveInviteRequest {
     private List<InviteRecipient> recipients;
     private List<String> roles;
