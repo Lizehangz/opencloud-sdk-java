@@ -96,6 +96,66 @@ OpenCloudClient basicClient = OpenCloudClient.create(
 );
 ```
 
+## TLS and Certificates
+
+If you see an error like `PKIX path building failed`, the target server certificate is not trusted by the JVM.
+
+Recommended fix when you want to package the certificate with the application:
+
+Place the trust store under:
+
+```text
+src/main/resources/certs/opencloud-truststore.jks
+```
+
+Then load it from the classpath:
+
+```java
+OpenCloudClient trustedClient = OpenCloudClient.create(
+    OpenCloudClientConfig.builder()
+        .baseUrl("https://cloud.example.com")
+        .authProvider(new BearerTokenAuthProvider("YOUR_TOKEN"))
+        .trustStoreResource("certs/opencloud-truststore.jks", "changeit")
+        .build()
+);
+```
+
+If you prefer an external file path instead of packaging the trust store in the jar:
+
+```java
+OpenCloudClient trustedClient = OpenCloudClient.create(
+    OpenCloudClientConfig.builder()
+        .baseUrl("https://cloud.example.com")
+        .authProvider(new BearerTokenAuthProvider("YOUR_TOKEN"))
+        .trustStore("C:/certs/opencloud-truststore.jks", "changeit")
+        .build()
+);
+```
+
+If you already have custom SSL components:
+
+```java
+OpenCloudClient customTlsClient = OpenCloudClient.create(
+    OpenCloudClientConfig.builder()
+        .baseUrl("https://cloud.example.com")
+        .sslSocketFactory(sslSocketFactory, trustManager)
+        .hostnameVerifier(hostnameVerifier)
+        .build()
+);
+```
+
+For local development only with self-signed certificates:
+
+```java
+OpenCloudClient insecureLocalClient = OpenCloudClient.create(
+    OpenCloudClientConfig.builder()
+        .baseUrl("https://localhost:9200")
+        .authProvider(new BasicAuthProvider("admin", "YOUR_PASSWORD"))
+        .insecureSkipTlsVerification(true)
+        .build()
+);
+```
+
 ## LibreGraph Usage
 
 The recommended way is now the typed API. `JsonNode` access is still available for uncommon or fast-moving endpoints.

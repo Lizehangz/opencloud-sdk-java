@@ -2,7 +2,7 @@ package com.opencloud.example;
 
 import com.opencloud.sdk.OpenCloudClient;
 import com.opencloud.sdk.OpenCloudClientConfig;
-import com.opencloud.sdk.auth.BearerTokenAuthProvider;
+import com.opencloud.sdk.auth.BasicAuthProvider;
 import com.opencloud.sdk.graph.model.CollectionResponse;
 import com.opencloud.sdk.graph.model.Drive;
 import com.opencloud.sdk.graph.model.User;
@@ -11,8 +11,12 @@ public class ExampleApp {
     public static void main(String[] args) throws Exception {
         OpenCloudClient client = OpenCloudClient.create(
             OpenCloudClientConfig.builder()
-                .baseUrl("https://cloud.example.com")
-                .authProvider(new BearerTokenAuthProvider("YOUR_TOKEN"))
+                .baseUrl("https://localhost:9200")
+                .authProvider(new BasicAuthProvider("admin", "YOUR_PASSWORD"))
+                // Preferred if you package a trust store under src/main/resources/certs/opencloud-truststore.jks
+                .trustStoreResource("certs/opencloud-truststore.jks", "changeit")
+                // For local development only. Uncomment if you do not want to manage certificates yet.
+                // .insecureSkipTlsVerification(true)
                 .build()
         );
 

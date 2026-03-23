@@ -5,6 +5,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opencloud.sdk.auth.AuthProvider;
 import okhttp3.OkHttpClient;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.GeneralSecurityException;
+import java.security.KeyStore;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.util.concurrent.TimeUnit;
 
 public final class OpenCloudClientConfig {
@@ -15,6 +28,14 @@ public final class OpenCloudClientConfig {
     private final AuthProvider authProvider;
     private final ObjectMapper objectMapper;
     private final OkHttpClient okHttpClient;
+    private final SSLSocketFactory sslSocketFactory;
+    private final X509TrustManager trustManager;
+    private final HostnameVerifier hostnameVerifier;
+    private final boolean insecureSkipTlsVerification;
+    private final String trustStorePath;
+    private final String trustStoreResource;
+    private final char[] trustStorePassword;
+    private final String trustStoreType;
     private final long connectTimeoutMillis;
     private final long readTimeoutMillis;
     private final long writeTimeoutMillis;
@@ -27,6 +48,14 @@ public final class OpenCloudClientConfig {
         this.authProvider = builder.authProvider;
         this.objectMapper = builder.objectMapper != null ? builder.objectMapper : defaultObjectMapper();
         this.okHttpClient = builder.okHttpClient;
+        this.sslSocketFactory = builder.sslSocketFactory;
+        this.trustManager = builder.trustManager;
+        this.hostnameVerifier = builder.hostnameVerifier;
+        this.insecureSkipTlsVerification = builder.insecureSkipTlsVerification;
+        this.trustStorePath = builder.trustStorePath;
+        this.trustStoreResource = builder.trustStoreResource;
+        this.trustStorePassword = builder.trustStorePassword != null ? builder.trustStorePassword.clone() : null;
+        this.trustStoreType = builder.trustStoreType;
         this.connectTimeoutMillis = builder.connectTimeoutMillis;
         this.readTimeoutMillis = builder.readTimeoutMillis;
         this.writeTimeoutMillis = builder.writeTimeoutMillis;
@@ -65,11 +94,12 @@ public final class OpenCloudClientConfig {
             return okHttpClient;
         }
 
-        return new OkHttpClient.Builder()
+        OkHttpClient.Builder builder = new OkHttpClient.Builder()
             .connectTimeout(connectTimeoutMillis, TimeUnit.MILLISECONDS)
             .readTimeout(readTimeoutMillis, TimeUnit.MILLISECONDS)
-            .writeTimeout(writeTimeoutMillis, TimeUnit.MILLISECONDS)
-            .build();
+            .writeTimeout(writeTimeoutMillis, TimeUnit.MILLISECONDS);
+
+        return applySslSettings(builder).build();
     }
 
     private static String trimTrailingSlash(String value) {
@@ -104,6 +134,111 @@ public final class OpenCloudClientConfig {
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
+    private OkHttpClient.Builder applySslSettings(OkHttpClient.Builder builder) {
+        try {
+            if (insecureSkipTlsVerification) {
+                X509TrustManager insecureTrustManager = insecureTrustManager();
+                builder.sslSocketFactory(newSslSocketFactory(insecureTrustManager), insecureTrustManager);
+                builder.hostnameVerifier(insecureHostnameVerifier());
+                return builder;
+            }
+
+            X509TrustManager resolvedTrustManager = trustManager;
+            SSLSocketFactory resolvedSocketFactory = sslSocketFactory;
+
+            if (resolvedSocketFactory == null && trustStorePath != null && !trustStorePath.trim().isEmpty()) {
+                resolvedTrustManager = trustManagerFromTrustStore(openFileInputStream(trustStorePath), trustStorePassword, trustStoreType);
+                resolvedSocketFactory = newSslSocketFactory(resolvedTrustManager);
+            }
+
+            if (resolvedSocketFactory == null && trustStoreResource != null && !trustStoreResource.trim().isEmpty()) {
+                resolvedTrustManager = trustManagerFromTrustStore(openResourceInputStream(trustStoreResource), trustStorePassword, trustStoreType);
+                resolvedSocketFactory = newSslSocketFactory(resolvedTrustManager);
+            }
+
+            if (resolvedSocketFactory != null && resolvedTrustManager != null) {
+                builder.sslSocketFactory(resolvedSocketFactory, resolvedTrustManager);
+            }
+
+            if (hostnameVerifier != null) {
+                builder.hostnameVerifier(hostnameVerifier);
+            }
+
+            return builder;
+        } catch (GeneralSecurityException e) {
+            throw new IllegalStateException("Failed to configure SSL for OpenCloud client", e);
+        } catch (IOException e) {
+            throw new IllegalStateException("Failed to load trust store for OpenCloud client", e);
+        }
+    }
+
+    private static X509TrustManager trustManagerFromTrustStore(InputStream inputStream, char[] trustStorePassword, String trustStoreType)
+        throws GeneralSecurityException, IOException {
+        KeyStore keyStore = KeyStore.getInstance(trustStoreType != null ? trustStoreType : KeyStore.getDefaultType());
+        try {
+            keyStore.load(inputStream, trustStorePassword);
+        } finally {
+            inputStream.close();
+        }
+
+        TrustManagerFactory factory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+        factory.init(keyStore);
+        return findX509TrustManager(factory.getTrustManagers());
+    }
+
+    private static InputStream openFileInputStream(String trustStorePath) throws IOException {
+        return new FileInputStream(trustStorePath);
+    }
+
+    private static InputStream openResourceInputStream(String trustStoreResource) throws IOException {
+        String normalized = trustStoreResource.startsWith("/") ? trustStoreResource.substring(1) : trustStoreResource;
+        ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+        InputStream inputStream = contextClassLoader != null ? contextClassLoader.getResourceAsStream(normalized) : null;
+        if (inputStream == null) {
+            inputStream = OpenCloudClientConfig.class.getClassLoader().getResourceAsStream(normalized);
+        }
+        if (inputStream == null) {
+            throw new IOException("Trust store resource not found: " + trustStoreResource);
+        }
+        return inputStream;
+    }
+
+    private static SSLSocketFactory newSslSocketFactory(X509TrustManager trustManager) throws GeneralSecurityException {
+        SSLContext sslContext = SSLContext.getInstance("TLS");
+        sslContext.init(null, new TrustManager[]{trustManager}, new SecureRandom());
+        return sslContext.getSocketFactory();
+    }
+
+    private static X509TrustManager insecureTrustManager() {
+        return new X509TrustManager() {
+            @Override
+            public void checkClientTrusted(X509Certificate[] chain, String authType) {
+            }
+
+            @Override
+            public void checkServerTrusted(X509Certificate[] chain, String authType) {
+            }
+
+            @Override
+            public X509Certificate[] getAcceptedIssuers() {
+                return new X509Certificate[0];
+            }
+        };
+    }
+
+    private static HostnameVerifier insecureHostnameVerifier() {
+        return (hostname, session) -> true;
+    }
+
+    private static X509TrustManager findX509TrustManager(TrustManager[] trustManagers) {
+        for (TrustManager trustManager : trustManagers) {
+            if (trustManager instanceof X509TrustManager) {
+                return (X509TrustManager) trustManager;
+            }
+        }
+        throw new IllegalStateException("No X509TrustManager found");
+    }
+
     public static final class Builder {
         private String baseUrl;
         private String graphBasePath = "/graph";
@@ -112,6 +247,14 @@ public final class OpenCloudClientConfig {
         private AuthProvider authProvider;
         private ObjectMapper objectMapper;
         private OkHttpClient okHttpClient;
+        private SSLSocketFactory sslSocketFactory;
+        private X509TrustManager trustManager;
+        private HostnameVerifier hostnameVerifier;
+        private boolean insecureSkipTlsVerification;
+        private String trustStorePath;
+        private String trustStoreResource;
+        private char[] trustStorePassword;
+        private String trustStoreType = KeyStore.getDefaultType();
         private long connectTimeoutMillis = 10_000L;
         private long readTimeoutMillis = 60_000L;
         private long writeTimeoutMillis = 60_000L;
@@ -148,6 +291,52 @@ public final class OpenCloudClientConfig {
 
         public Builder okHttpClient(OkHttpClient okHttpClient) {
             this.okHttpClient = okHttpClient;
+            return this;
+        }
+
+        public Builder sslSocketFactory(SSLSocketFactory sslSocketFactory, X509TrustManager trustManager) {
+            this.sslSocketFactory = sslSocketFactory;
+            this.trustManager = trustManager;
+            return this;
+        }
+
+        public Builder hostnameVerifier(HostnameVerifier hostnameVerifier) {
+            this.hostnameVerifier = hostnameVerifier;
+            return this;
+        }
+
+        public Builder insecureSkipTlsVerification(boolean insecureSkipTlsVerification) {
+            this.insecureSkipTlsVerification = insecureSkipTlsVerification;
+            return this;
+        }
+
+        public Builder trustStore(String trustStorePath, String trustStorePassword) {
+            this.trustStorePath = trustStorePath;
+            this.trustStoreResource = null;
+            this.trustStorePassword = trustStorePassword != null ? trustStorePassword.toCharArray() : null;
+            return this;
+        }
+
+        public Builder trustStore(String trustStorePath, String trustStorePassword, String trustStoreType) {
+            this.trustStorePath = trustStorePath;
+            this.trustStoreResource = null;
+            this.trustStorePassword = trustStorePassword != null ? trustStorePassword.toCharArray() : null;
+            this.trustStoreType = trustStoreType;
+            return this;
+        }
+
+        public Builder trustStoreResource(String trustStoreResource, String trustStorePassword) {
+            this.trustStorePath = null;
+            this.trustStoreResource = trustStoreResource;
+            this.trustStorePassword = trustStorePassword != null ? trustStorePassword.toCharArray() : null;
+            return this;
+        }
+
+        public Builder trustStoreResource(String trustStoreResource, String trustStorePassword, String trustStoreType) {
+            this.trustStorePath = null;
+            this.trustStoreResource = trustStoreResource;
+            this.trustStorePassword = trustStorePassword != null ? trustStorePassword.toCharArray() : null;
+            this.trustStoreType = trustStoreType;
             return this;
         }
 
