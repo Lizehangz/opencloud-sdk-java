@@ -30,14 +30,14 @@ public class WebDavApiTest {
     }
 
     @Test
-    public void shouldUploadFileToResourceScopedWebDavPath() throws Exception {
+    public void shouldUploadFileToResourceScopedWebDavRootPath() throws Exception {
         server.enqueue(new MockResponse().setResponseCode(201));
 
-        client.webDav().upload("space-1", "docs/readme.txt", "hello".getBytes("UTF-8"), "text/plain");
+        client.webDav().upload("space-1", "readme.txt", "hello".getBytes("UTF-8"), "text/plain");
 
         RecordedRequest request = server.takeRequest();
         Assert.assertEquals("PUT", request.getMethod());
-        Assert.assertEquals("/dav/spaces/space-1/docs/readme.txt", request.getPath());
+        Assert.assertEquals("/dav/spaces/space-1/readme.txt", request.getPath());
         Assert.assertEquals("text/plain", request.getHeader("Content-Type"));
         Assert.assertEquals("hello", request.getBody().readUtf8());
     }
@@ -79,3 +79,4 @@ public class WebDavApiTest {
         Assert.assertEquals("/remote.php/dav/files/demo/readme.txt", request.getPath());
     }
 }
+

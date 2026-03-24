@@ -561,7 +561,30 @@ https://cloud.opencloud.test/{webdav-base}/{resourceId}/{path}
 
 In this SDK, the default `webDavRootPath` is now `/dav/spaces`, so `resourceId` is required for the primary WebDAV methods.
 
-Upload a file:
+Upload a file to the space root:
+
+```java
+client.webDav().upload(
+    "resource-id",
+    "readme.txt",
+    "hello opencloud".getBytes("UTF-8"),
+    "text/plain"
+);
+```
+
+Download a file:
+
+```java
+byte[] content = client.webDav().download("resource-id", "readme.txt").getBody();
+```
+
+Create a folder:
+
+```java
+client.webDav().makeCollection("resource-id", "docs");
+```
+
+Upload into a folder:
 
 ```java
 client.webDav().upload(
@@ -572,17 +595,7 @@ client.webDav().upload(
 );
 ```
 
-Download a file:
-
-```java
-byte[] content = client.webDav().download("resource-id", "docs/readme.txt").getBody();
-```
-
-Create a folder:
-
-```java
-client.webDav().makeCollection("resource-id", "docs");
-```
+The parent folder must already exist before uploading into `docs/readme.txt`. If the folder does not exist, OpenCloud returns `409 Conflict`.
 
 Copy a file:
 
@@ -643,5 +656,6 @@ The included publish workflow uses `GITHUB_TOKEN` and the `github` server id fro
 - This version is intentionally pragmatic: it is easy to extend without code generation tooling.
 - The official LibreGraph spec is included in the repository as `libre-graph-v1.0.yaml`.
 - The SDK now supports both typed POJO access and `JsonNode` fallback access.
+
 
 
