@@ -243,7 +243,7 @@ public final class OpenCloudClientConfig {
         private String baseUrl;
         private String graphBasePath = "/graph";
         private String ocsBasePath = "/ocs/v2.php";
-        private String webDavRootPath = "/remote.php/dav";
+        private String webDavRootPath = "/dav/spaces";
         private AuthProvider authProvider;
         private ObjectMapper objectMapper;
         private OkHttpClient okHttpClient;
@@ -360,3 +360,4 @@ public final class OpenCloudClientConfig {
         }
     }
 }
+

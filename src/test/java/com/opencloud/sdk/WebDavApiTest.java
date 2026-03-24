@@ -25,46 +25,57 @@ public class WebDavApiTest {
 
     @After
     public void tearDown() throws Exception {
+        client.close();
         server.shutdown();
     }
 
     @Test
-    public void shouldUploadFileToWebDav() throws Exception {
+    public void shouldUploadFileToResourceScopedWebDavPath() throws Exception {
         server.enqueue(new MockResponse().setResponseCode(201));
 
-        client.webDav().upload("/files/demo/readme.txt", "hello".getBytes("UTF-8"), "text/plain");
+        client.webDav().upload("space-1", "docs/readme.txt", "hello".getBytes("UTF-8"), "text/plain");
 
         RecordedRequest request = server.takeRequest();
         Assert.assertEquals("PUT", request.getMethod());
-        Assert.assertEquals("/remote.php/dav/files/demo/readme.txt", request.getPath());
+        Assert.assertEquals("/dav/spaces/space-1/docs/readme.txt", request.getPath());
         Assert.assertEquals("text/plain", request.getHeader("Content-Type"));
         Assert.assertEquals("hello", request.getBody().readUtf8());
     }
 
     @Test
-    public void shouldSetDestinationHeaderForCopy() throws Exception {
+    public void shouldSetDestinationHeaderForResourceScopedCopy() throws Exception {
         server.enqueue(new MockResponse().setResponseCode(201));
 
-        client.webDav().copy("/files/demo/readme.txt", "/files/demo/readme-copy.txt", true);
+        client.webDav().copy("space-1", "docs/readme.txt", "archive/readme-copy.txt", true);
 
         RecordedRequest request = server.takeRequest();
         Assert.assertEquals("COPY", request.getMethod());
         Assert.assertEquals(
-            server.url("/").toString().substring(0, server.url("/").toString().length() - 1) + "/remote.php/dav/files/demo/readme-copy.txt",
+            server.url("/").toString().substring(0, server.url("/").toString().length() - 1) + "/dav/spaces/space-1/archive/readme-copy.txt",
             request.getHeader("Destination")
         );
         Assert.assertEquals("T", request.getHeader("Overwrite"));
     }
 
     @Test
-    public void shouldSetDestinationHeaderForMove() throws Exception {
+    public void shouldSetDestinationHeaderForResourceScopedMove() throws Exception {
         server.enqueue(new MockResponse().setResponseCode(201));
 
-        client.webDav().move("/files/demo/readme.txt", "/files/demo/archive/readme.txt", false);
+        client.webDav().move("space-1", "docs/readme.txt", "archive/readme.txt", false);
 
         RecordedRequest request = server.takeRequest();
         Assert.assertEquals("MOVE", request.getMethod());
         Assert.assertEquals("F", request.getHeader("Overwrite"));
-        Assert.assertTrue(request.getHeader("Destination").endsWith("/remote.php/dav/files/demo/archive/readme.txt"));
+        Assert.assertTrue(request.getHeader("Destination").endsWith("/dav/spaces/space-1/archive/readme.txt"));
+    }
+
+    @Test
+    public void shouldKeepLegacyWebDavMethodsForCompatibility() throws Exception {
+        server.enqueue(new MockResponse().setResponseCode(201));
+
+        client.webDav().upload("/files/demo/readme.txt", "hello".getBytes("UTF-8"), "text/plain");
+
+        RecordedRequest request = server.takeRequest();
+        Assert.assertEquals("/remote.php/dav/files/demo/readme.txt", request.getPath());
     }
 }

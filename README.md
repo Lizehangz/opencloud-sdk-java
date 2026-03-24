@@ -553,11 +553,20 @@ JsonNode response = client.ocs().execute(
 
 ## WebDAV Usage
 
+OpenCloud WebDAV is resource scoped. The canonical request format is:
+
+```text
+https://cloud.opencloud.test/{webdav-base}/{resourceId}/{path}
+```
+
+In this SDK, the default `webDavRootPath` is now `/dav/spaces`, so `resourceId` is required for the primary WebDAV methods.
+
 Upload a file:
 
 ```java
 client.webDav().upload(
-    "/files/demo/readme.txt",
+    "resource-id",
+    "docs/readme.txt",
     "hello opencloud".getBytes("UTF-8"),
     "text/plain"
 );
@@ -566,21 +575,22 @@ client.webDav().upload(
 Download a file:
 
 ```java
-byte[] content = client.webDav().download("/files/demo/readme.txt").getBody();
+byte[] content = client.webDav().download("resource-id", "docs/readme.txt").getBody();
 ```
 
 Create a folder:
 
 ```java
-client.webDav().makeCollection("/files/demo/docs");
+client.webDav().makeCollection("resource-id", "docs");
 ```
 
 Copy a file:
 
 ```java
 client.webDav().copy(
-    "/files/demo/readme.txt",
-    "/files/demo/readme-copy.txt",
+    "resource-id",
+    "docs/readme.txt",
+    "archive/readme-copy.txt",
     true
 );
 ```
@@ -589,8 +599,9 @@ Move a file:
 
 ```java
 client.webDav().move(
-    "/files/demo/readme-copy.txt",
-    "/files/demo/archive/readme.txt",
+    "resource-id",
+    "archive/readme-copy.txt",
+    "archive/readme.txt",
     true
 );
 ```
@@ -598,11 +609,12 @@ client.webDav().move(
 Delete a file:
 
 ```java
-client.webDav().delete("/files/demo/archive/readme.txt");
+client.webDav().delete("resource-id", "archive/readme.txt");
 ```
 
-## Current Structure
+For convenience, the previous legacy overloads based on `/remote.php/dav/files/...` are still present but marked as deprecated. New integrations should use the resource-scoped methods.
 
+## Current Structure
 - `OpenCloudClient` is the main SDK entry point.
 - `graph()` exposes typed resource APIs for `me`, `users`, `drives`, `groups`, `invitations`, `applications`, `education`, `tags`, and `activities`, plus the low-level operation executor.
 - `ocs()` exposes convenience methods plus a generic executor.
@@ -631,3 +643,5 @@ The included publish workflow uses `GITHUB_TOKEN` and the `github` server id fro
 - This version is intentionally pragmatic: it is easy to extend without code generation tooling.
 - The official LibreGraph spec is included in the repository as `libre-graph-v1.0.yaml`.
 - The SDK now supports both typed POJO access and `JsonNode` fallback access.
+
+
