@@ -1,5 +1,6 @@
 package com.opencloud.sdk;
 
+import com.opencloud.sdk.webdav.ThumbnailOptions;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
@@ -43,6 +44,44 @@ public class WebDavApiTest {
     }
 
     @Test
+    public void shouldGetThumbnailFromResourceScopedWebDavPath() throws Exception {
+        server.enqueue(new MockResponse().setResponseCode(200).setBody("thumb"));
+
+        byte[] thumbnail = client.webDav().getThumbnail("space-1", "photos/cat.jpg", 128, 96).getBody();
+
+        RecordedRequest request = server.takeRequest();
+        Assert.assertEquals("GET", request.getMethod());
+        Assert.assertEquals("/dav/spaces/space-1/photos/cat.jpg?preview=1&x=128&y=96", request.getPath());
+        Assert.assertEquals("*/*", request.getHeader("Accept"));
+        Assert.assertEquals("thumb", new String(thumbnail, "UTF-8"));
+    }
+
+    @Test
+    public void shouldGetThumbnailWithAdvancedOptions() throws Exception {
+        server.enqueue(new MockResponse().setResponseCode(200).setBody("thumb"));
+
+        ThumbnailOptions options = ThumbnailOptions.builder()
+            .processor("fit")
+            .scalingUp(false)
+            .aspectRatio(true)
+            .cacheKey("etag-123")
+            .build();
+
+        client.webDav().getThumbnail("space-1", "photos/cat.jpg", 200, 200, options);
+
+        RecordedRequest request = server.takeRequest();
+        Assert.assertEquals(
+            "/dav/spaces/space-1/photos/cat.jpg?preview=1&x=200&y=200&processor=fit&scalingup=0&a=1&c=etag-123",
+            request.getPath()
+        );
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldRejectInvalidThumbnailWidth() throws Exception {
+        client.webDav().getThumbnail("space-1", "photos/cat.jpg", 0, 96);
+    }
+
+    @Test
     public void shouldSetDestinationHeaderForResourceScopedCopy() throws Exception {
         server.enqueue(new MockResponse().setResponseCode(201));
 
@@ -79,4 +118,3 @@ public class WebDavApiTest {
         Assert.assertEquals("/remote.php/dav/files/demo/readme.txt", request.getPath());
     }
 }
-

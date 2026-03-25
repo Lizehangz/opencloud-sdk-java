@@ -23,6 +23,38 @@ public final class WebDavApi {
         return requestExecutor.executeWebDav("GET", absoluteResourcePath(resourceId, relativePath), ApiRequest.builder().accept("*/*").build(), byte[].class);
     }
 
+    public ApiResponse<byte[]> getThumbnail(String resourceId, String relativePath, int width, int height) throws IOException {
+        return getThumbnail(resourceId, relativePath, width, height, null);
+    }
+
+    public ApiResponse<byte[]> getThumbnail(String resourceId, String relativePath, int width, int height, ThumbnailOptions options) throws IOException {
+        validateThumbnailDimension(width, "width");
+        validateThumbnailDimension(height, "height");
+
+        ApiRequest.Builder request = ApiRequest.builder()
+            .accept("*/*")
+            .queryParam("preview", "1")
+            .queryParam("x", String.valueOf(width))
+            .queryParam("y", String.valueOf(height));
+
+        if (options != null) {
+            if (options.getProcessor() != null && !options.getProcessor().trim().isEmpty()) {
+                request.queryParam("processor", options.getProcessor().trim());
+            }
+            if (options.getScalingUp() != null) {
+                request.queryParam("scalingup", booleanToFlag(options.getScalingUp()));
+            }
+            if (options.getAspectRatio() != null) {
+                request.queryParam("a", booleanToFlag(options.getAspectRatio()));
+            }
+            if (options.getCacheKey() != null && !options.getCacheKey().trim().isEmpty()) {
+                request.queryParam("c", options.getCacheKey().trim());
+            }
+        }
+
+        return requestExecutor.executeWebDav("GET", absoluteResourcePath(resourceId, relativePath), request.build(), byte[].class);
+    }
+
     public ApiResponse<Void> upload(String resourceId, String relativePath, byte[] body, String contentType) throws IOException {
         ApiRequest request = ApiRequest.builder()
             .binaryBody(body)
@@ -175,5 +207,15 @@ public final class WebDavApi {
             normalized = normalized.substring(0, normalized.length() - 1);
         }
         return normalized;
+    }
+
+    private void validateThumbnailDimension(int value, String fieldName) {
+        if (value <= 0) {
+            throw new IllegalArgumentException(fieldName + " must be greater than 0");
+        }
+    }
+
+    private String booleanToFlag(boolean value) {
+        return value ? "1" : "0";
     }
 }
